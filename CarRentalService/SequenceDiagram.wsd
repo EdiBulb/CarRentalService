@@ -1,0 +1,20 @@
+@startuml
+actor User
+participant "User Interface"
+participant UserManager
+database "Database"
+
+User -> "User Interface" : Enter email and password
+"User Interface" -> UserManager : login(email, password)
+UserManager -> Database : SELECT user_id, name, password, role FROM users WHERE email=?
+Database --> UserManager : user data
+UserManager -> UserManager : check_password(provided_password, stored_password)
+alt successful login
+    UserManager --> "User Interface" : Login successful
+    "User Interface" --> User : Display user dashboard
+else login failed
+    UserManager --> "User Interface" : Login failed
+    "User Interface" --> User : Show error message
+end
+
+@enduml
