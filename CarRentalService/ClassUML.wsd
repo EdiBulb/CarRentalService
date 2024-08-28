@@ -1,35 +1,34 @@
 @startuml
-skinparam style strictuml
 class User {
   - user_id: int
-  - name: String
-  - email: String
+  - name: string
+  - email: string
   + display_info(): void
   + perform_task(): void
 }
 
 class Customer {
-  - role: String
+  - role: string
   + perform_task(): void
 }
 
 class Admin {
-  - role: String
+  - role: string
   + perform_task(): void
 }
 
 class UserManager {
   - conn: DatabaseConnection
   - cursor: DatabaseCursor
-  + register_user(name: String, email: String, password: String, role: String): void
-  + login(email: String, password: String): User
+  + register_user(name: string, email: string, password: string, role: string): void
+  + login(email: string, password: string): User
 }
 
 class CarManager {
   - conn: DatabaseConnection
   - cursor: DatabaseCursor
-  + add_car(make: String, model: String, year: int, mileage: int, available_now: boolean, min_rent_period: int, max_rent_period: int): void
-  + update_car(car_id: int, make: String, model: String, year: int, mileage: int, available_now: boolean, min_rent_period: int, max_rent_period: int): void
+  + add_car(make: string, model: string, year: int, mileage: int, available_now: boolean, min_rent_period: int, max_rent_period: int): void
+  + update_car(car_id: int, make: string, model: string, year: int, mileage: int, available_now: boolean, min_rent_period: int, max_rent_period: int): void
   + delete_car(car_id: int): void
   + list_cars(): void
 }
@@ -46,7 +45,8 @@ class RentalManager {
 
 User <|-- Customer
 User <|-- Admin
-UserManager .right.> User : <<creates>>
-CarManager .right.> Car : <<manages>>
-RentalManager .right.> Rental : <<manages>>
+UserManager ..> User : creates
+CarManager ..> Car : manages
+RentalManager ..> Rental : manages
+
 @enduml

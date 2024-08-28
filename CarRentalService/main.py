@@ -372,11 +372,18 @@ def admin_menu(user, car_manager, rental_manager):
         if choice == '8':
             print("Logging out...")
             break
-        # admin_actions 중 하나라면, 
-        elif choice in admin_actions:
-            admin_actions[choice](user, car_manager, rental_manager)
+        elif choice == '5':
+            rental_id = input("Enter rental ID to approve: ")
+            rental_manager.approve_rental(int(rental_id))
+        elif choice == '6':
+            rental_id = input("Enter rental ID to cancel: ")
+            rental_manager.cancel_rental(int(rental_id))
+        elif choice == '7':
+            rental_id = input("Enter rental ID to complete: ")
+            rental_manager.complete_rental(int(rental_id))
         else:
             print("Invalid choice, please try again.")
+
 
 # admin_actions 딕셔너리
 admin_actions = {
@@ -384,9 +391,6 @@ admin_actions = {
     '2': lambda user, car_manager, _: car_manager.update_car(), # 2을 선택하는 경우, car_manager의 update_car() 메소드를 호출해서 새로운 차량 정보 업데이트
     '3': lambda user, car_manager, _: car_manager.delete_car(), # 3을 선택하는 경우, car_manager의 delete_car() 메소드를 호출해서 차량 삭제
     '4': lambda user, car_manager, _: car_manager.list_cars(), # 4을 선택하는 경우, car_manager의 list_cars() 메소드를 호출해서 등록된 차량 보여줌
-    '5': lambda user, _, rental_manager: rental_manager.approve_rental(), # 5을 선택하는 경우, rental_manager의 approve_rental() 메소드를 호출해서 대여 요청 승인
-    '6': lambda user, _, rental_manager: rental_manager.cancel_rental(), # 6을 선택하는 경우, rental_manager의 cancel_rental() 메소드를 호출해서 대여 요청 취소
-    '7': lambda user, _, rental_manager: rental_manager.complete_rental() # 7을 선택하는 경우, rental_manager의 complete_rental() 메소드를 호출해서 대여 완료
 }
 
 # customer 로그인인 경우, 고객 메뉴가 나타남
@@ -403,17 +407,17 @@ def customer_menu(user, rental_manager):
         if choice == '3':
             print("Logging out...")
             break
-        elif choice in customer_actions:
-            customer_actions[choice](user, rental_manager)
+        elif choice == '1': # 1을 선택할 경우, rental_manager의 create_rental() 메소드를 호출해서 새로운 대여를 생성한다.
+            car_id = input("Enter car ID to rent: ")
+            start_date = input("Enter start date (YYYY-MM-DD): ")
+            end_date = input("Enter end date (YYYY-MM-DD): ")
+            rental_manager.create_rental(int(car_id), user.user_id, start_date, end_date)
+        elif choice == '2': # 2를 선택할 경우, rental_manager의 list_rentals() 메소드를 호출해서 사용자가 현재까지 진행한 모든 대여 목록을 조회한다.
+            rental_manager.list_rentals()
         else:
             print("Invalid choice, please try again.")
 
 
-
-customer_actions = {
-    '1': lambda user, rental_manager: rental_manager.create_rental(), # 1을 선택할 경우, rental_manager의 create_rental() 메소드를 호출해서 새로운 대여를 생성한다.
-    '2': lambda user, rental_manager: rental_manager.list_rentals() # 2를 선택할 경우, rental_manager의 list_rentals() 메소드를 호출해서 사용자가 현재까지 진행한 모든 대여 목록을 조회한다.
-}
 
 if __name__ == "__main__":
 

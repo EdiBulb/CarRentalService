@@ -1,10 +1,14 @@
 @startuml
 left to right direction
-actor Customer
-actor Admin
+
+
+
 rectangle "Car Rental System" {
+  actor Customer
+  actor Admin
+
+  usecase "Log in" as UC2
   usecase "Sign Up" as UC1
-  usecase "Log In" as UC2
   usecase "Rent a Car" as UC3
   usecase "Return a Car" as UC4
   usecase "View Rentals" as UC5
@@ -16,12 +20,12 @@ rectangle "Car Rental System" {
   usecase "Cancel Rental" as UC11
   usecase "Complete Rental" as UC12
 
-  Customer --> UC1
-  Customer --> UC2
+  UC2 --> Customer
+  UC2 --> Admin
   Customer --> UC3
   Customer --> UC4
   Customer --> UC5
-  Admin --> UC2
+
   Admin --> UC6
   Admin --> UC7
   Admin --> UC8

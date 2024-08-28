@@ -1,20 +1,109 @@
 @startuml
 actor User
-participant "User Interface"
-participant UserManager
-database "Database"
 
-User -> "User Interface" : Enter email and password
-"User Interface" -> UserManager : login(email, password)
-UserManager -> Database : SELECT user_id, name, password, role FROM users WHERE email=?
-Database --> UserManager : user data
-UserManager -> UserManager : check_password(provided_password, stored_password)
-alt successful login
-    UserManager --> "User Interface" : Login successful
-    "User Interface" --> User : Display user dashboard
-else login failed
-    UserManager --> "User Interface" : Login failed
-    "User Interface" --> User : Show error message
-end
+participant "UserManager" as UM
+participant "CarManager" as CM
+participant "RentalManager" as RM
+database "Database" as DB
+
+== Registration ==
+User -> UM : register_user(name, email, password, role)
+activate UM
+UM -> DB : INSERT INTO users (name, email, password, role)
+activate DB
+DB -> UM : confirmation
+deactivate DB
+UM -> User : registration status
+deactivate UM
+
+== Login ==
+User -> UM : login(email, password)
+activate UM
+UM -> DB : SELECT user_id, name, password, role FROM users WHERE email = ?
+activate DB
+DB -> UM : user data
+deactivate DB
+UM -> User : login response
+deactivate UM
+
+== Add Car ==
+User -> CM : add_car(make, model, year, mileage, available, rent_period)
+activate CM
+CM -> DB : INSERT INTO cars (make, model, year, mileage, available, rent_period)
+activate DB
+DB -> CM : confirmation
+deactivate DB
+CM -> User : car added
+deactivate CM
+
+== Update Car ==
+User -> CM : update_car(car_id, new details)
+activate CM
+CM -> DB : UPDATE cars SET details WHERE car_id = ?
+activate DB
+DB -> CM : update confirmation
+deactivate DB
+CM -> User : update status
+deactivate CM
+
+== Delete Car ==
+User -> CM : delete_car(car_id)
+activate CM
+CM -> DB : DELETE FROM cars WHERE car_id = ?
+activate DB
+DB -> CM : delete confirmation
+deactivate DB
+CM -> User : deletion status
+deactivate CM
+
+== List Cars ==
+User -> CM : list_cars()
+activate CM
+CM -> DB : SELECT * FROM cars
+activate DB
+DB -> CM : list of cars
+deactivate DB
+CM -> User : display cars
+deactivate CM
+
+== Create Rental ==
+User -> RM : create_rental(car_id, start_date, end_date)
+activate RM
+RM -> DB : INSERT INTO rentals (car_id, user_id, dates, fee, status)
+activate DB
+DB -> RM : rental confirmation
+deactivate DB
+RM -> User : rental status
+deactivate RM
+
+== Cancel Rental ==
+User -> RM : cancel_rental(rental_id)
+activate RM
+RM -> DB : UPDATE rentals SET status = 'cancelled' WHERE rental_id = ?
+activate DB
+DB -> RM : cancellation confirmation
+deactivate DB
+RM -> User : cancellation status
+deactivate RM
+
+== Approve Rental ==
+User -> RM : approve_rental(rental_id)
+activate RM
+RM -> DB : UPDATE rentals SET status = 'active' WHERE rental_id = ?
+activate DB
+DB -> RM : approval confirmation
+deactivate DB
+RM -> User : approval status
+deactivate RM
+
+== Complete Rental ==
+User -> RM : complete_rental(rental_id)
+activate RM
+RM -> DB : UPDATE rentals SET status = 'completed' WHERE rental_id = ?
+activate DB
+DB -> RM : completion confirmation
+deactivate DB
+RM -> User : completion status
+deactivate RM
 
 @enduml
