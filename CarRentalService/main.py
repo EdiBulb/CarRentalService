@@ -418,7 +418,6 @@ def customer_menu(user, rental_manager):
             print("Invalid choice, please try again.")
 
 
-
 if __name__ == "__main__":
 
 
